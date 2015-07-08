@@ -5,6 +5,8 @@
  */
 
 #include <tuple>
+#include <type_traits>
+#include <string>
 #include <iostream>
 
 #include "reflection.hpp"
