@@ -41,7 +41,7 @@ REFLECT_REGISTER(example_class,
    REFLECT_FIELD(string_field, "a string field"))
 
 int main() {
-    example_class ex{1, 2.0, "hello world"};
+    example_class ex{1, 1.5, "hello world"};
     example_serializer<example_class> s(ex);
     s.serialize();
 }

@@ -8,24 +8,24 @@
 
 struct for_each_impl {
     template<std::size_t I = 0, typename Function, typename... Items>
-    inline typename std::enable_if<I == sizeof...(Items), void>::type
-    static for_each(std::tuple<Items...>& tuple, Function& fn) {}
+    static typename std::enable_if<I == sizeof...(Items), void>::type
+    for_each(std::tuple<Items...>& tuple, Function& fn) {}
 
     template<std::size_t I = 0, typename Function, typename... Items>
-    inline typename std::enable_if<I < sizeof...(Items), void>::type
-    static for_each(std::tuple<Items...>& tuple, Function& fn) {
+    static typename std::enable_if<I < sizeof...(Items), void>::type
+    for_each(std::tuple<Items...>& tuple, Function& fn) {
         fn(std::get<I>(tuple));
         for_each<I + 1, Function, Items...>(tuple, fn);
     }
 };
 
 template<typename Function, typename... Items>
-void for_each(std::tuple<Items...>& tuple, Function& fn) {
+inline void for_each(std::tuple<Items...>& tuple, Function& fn) {
     for_each_impl::for_each(tuple, fn);
 }
 
 template<typename Function, typename... Items>
-void for_each(std::tuple<Items...>&& tuple, Function& fn) {
+inline void for_each(std::tuple<Items...>&& tuple, Function& fn) {
     for_each_impl::for_each(tuple, fn);
 }
 
@@ -44,13 +44,13 @@ struct field {
 };
 
 template<typename Klass, typename Type>
-field<Klass, Type> make_field(std::string name, Type (Klass::*pointer), int flags = 0, std::string caption = "", std::string doc = "") {
+inline field<Klass, Type> make_field(std::string name, Type (Klass::*pointer), int flags = 0, std::string caption = "", std::string doc = "") {
     return field<Klass, Type>{std::move(name), pointer, flags, std::move(caption), std::move(doc)};
 }
 
 template<typename Klass>
 struct meta {
-    std::tuple<> fields() { return std::tuple<>(); }
+    static std::tuple<> fields() { return std::tuple<>(); }
 };
 
 #define REFLECT_REGISTER(cls, ...) \
